@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script defer src="main.js"></script>
+    <title>Carrito de Compras - Entregable 2</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-   
+    <header>
+        <h1>🍹 Bebidas Galácticas</h1>
+        <p>Delivery interplanetario de bebidas con los mejores precios del universo 🚀</p>
+    </header>
+
+    <main>
+        <section class="productos" id="productos"></section>
+
+        <aside class="carrito">
+            <h2>🛒 Tu carrito</h2>
+            <ul id="lista-carrito"></ul>
+            <p class="total">Total: $<span id="total">0</span></p>
+            <button id="vaciar-carrito">Vaciar carrito</button>
+        </aside>
+    </main>
+
+    <footer>
+        <p>© 2025 Bebidas Galácticas - Proyecto académico</p>
+    </footer>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
