@@ -1,10 +1,10 @@
 
 const productos = [
-  { id: 1, nombre: "Notebook Lenovo", precio: 250000, img: "https://pccenter.com.ar/cdn/shop/files/FotoxdsTiendaOnline333_1.jpg?v=1726672019" },
-  { id: 2, nombre: "iPhone 16 Pro", precio: 600000, img: "https://bioscomputacion.com.ar/img/Public/1161/81758-producto-asset-mms-144638860.jpg" },
-  { id: 3, nombre: "Auriculares inalámbricos", precio: 35000, img: "https://row.hyperx.com/cdn/shop/products/hyperx_cloud_20flight_1_main.jpg?v=1662435222" },
+  { id: 1, nombre: "Notebook Lenovo", precio: 2500000, img: "https://pccenter.com.ar/cdn/shop/files/FotoxdsTiendaOnline333_1.jpg?v=1726672019" },
+  { id: 2, nombre: "iPhone 16 Pro", precio: 1200000, img: "https://bioscomputacion.com.ar/img/Public/1161/81758-producto-asset-mms-144638860.jpg" },
+  { id: 3, nombre: "Auriculares inalámbricos", precio: 250000, img: "https://row.hyperx.com/cdn/shop/products/hyperx_cloud_20flight_1_main.jpg?v=1662435222" },
   { id: 4, nombre: "Smartwatch", precio: 80000, img: "https://acdn-us.mitiendanube.com/stores/001/145/546/products/w17-final-d10e76d756e216785417020688225996-1024-1024.jpg" },
-  { id: 5, nombre: "Monitor Gamer", precio: 120000, img: "https://pccenter.com.ar/cdn/shop/files/FotosTiejikndaOnline.jpg?v=1737379548" },
+  { id: 5, nombre: "Monitor Gamer", precio: 320000, img: "https://pccenter.com.ar/cdn/shop/files/FotosTiejikndaOnline.jpg?v=1737379548" },
   { id: 6, nombre: "Teclado Mecánico", precio: 45000, img: "https://acdn-us.mitiendanube.com/stores/001/593/734/products/nkb-68-angulo-aceb2a184cf4194d8217507922791059-1024-1024.jpg" }
 ];
 
@@ -33,30 +33,39 @@ mostrarProductos();
 
 function agregarAlCarrito(id) {
   const item = productos.find(prod => prod.id === id);
-  carrito.push(item);
+  const itemEnCarrito = carrito.find(prod => prod.id === id);
+
+  if (itemEnCarrito) {
+   
+    itemEnCarrito.cantidad++;
+  } else {
+ 
+    carrito.push({ ...item, cantidad: 1 });
+  }
+
   localStorage.setItem("carrito", JSON.stringify(carrito));
   mostrarCarrito();
 }
 
-
-const carritoSection = document.getElementById("carritoSection");
-const carritoItems = document.getElementById("carritoItems");
-const total = document.getElementById("total");
-
 function mostrarCarrito() {
   carritoItems.innerHTML = "";
   let totalCompra = 0;
+
   carrito.forEach((prod, index) => {
-    totalCompra += prod.precio;
+    const subtotal = prod.precio * prod.cantidad;
+    totalCompra += subtotal;
+
     const div = document.createElement("div");
     div.innerHTML = `
-      ${prod.nombre} - $${prod.precio}
+      ${prod.nombre} - $${prod.precio.toLocaleString("es-AR")} x ${prod.cantidad} = <strong>$${subtotal.toLocaleString("es-AR")}</strong>
       <button onclick="eliminarDelCarrito(${index})">❌</button>
     `;
     carritoItems.appendChild(div);
   });
-  total.textContent = `Total: $${totalCompra}`;
+
+  total.textContent = `Total: $${totalCompra.toLocaleString("es-AR")}`;
 }
+
 
 
 function eliminarDelCarrito(index) {
