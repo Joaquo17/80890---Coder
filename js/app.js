@@ -10,8 +10,14 @@ const productos = [
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-
 const contenedorProductos = document.getElementById("productos");
+const verCarritoBtn = document.getElementById("verCarrito");
+
+
+function actualizarBotonCarrito() {
+  const totalCantidad = carrito.reduce((acc, prod) => acc + prod.cantidad, 0);
+  verCarritoBtn.textContent = `Ver Carrito (${totalCantidad})`;
+}
 
 function mostrarProductos() {
   contenedorProductos.innerHTML = "";
@@ -21,7 +27,7 @@ function mostrarProductos() {
     div.innerHTML = `
       <img src="${prod.img}" alt="${prod.nombre}">
       <h3>${prod.nombre}</h3>
-      <p>$${prod.precio}</p>
+      <p>$${prod.precio.toLocaleString("es-AR")}</p>
       <button onclick="agregarAlCarrito(${prod.id})">Agregar al carrito</button>
     `;
     contenedorProductos.appendChild(div);
@@ -30,16 +36,13 @@ function mostrarProductos() {
 
 mostrarProductos();
 
-
 function agregarAlCarrito(id) {
   const item = productos.find(prod => prod.id === id);
   const itemEnCarrito = carrito.find(prod => prod.id === id);
 
   if (itemEnCarrito) {
-   
     itemEnCarrito.cantidad++;
   } else {
- 
     carrito.push({ ...item, cantidad: 1 });
   }
 
@@ -64,16 +67,19 @@ function mostrarCarrito() {
   });
 
   total.textContent = `Total: $${totalCompra.toLocaleString("es-AR")}`;
+  actualizarBotonCarrito(); 
 }
 
-
-
 function eliminarDelCarrito(index) {
-  carrito.splice(index, 1);
+  if (carrito[index].cantidad > 1) {
+    carrito[index].cantidad--;
+  } else {
+    carrito.splice(index, 1);
+  }
+
   localStorage.setItem("carrito", JSON.stringify(carrito));
   mostrarCarrito();
 }
-
 
 document.getElementById("vaciarCarrito").addEventListener("click", () => {
   carrito = [];
@@ -81,9 +87,9 @@ document.getElementById("vaciarCarrito").addEventListener("click", () => {
   mostrarCarrito();
 });
 
-
 document.getElementById("verCarrito").addEventListener("click", () => {
   carritoSection.classList.toggle("oculto");
 });
+
 
 mostrarCarrito();
